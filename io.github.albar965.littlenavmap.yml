@@ -1,0 +1,179 @@
+app-id: io.github.albar965.littlenavmap
+runtime: org.kde.Platform
+runtime-version: "5.15"
+sdk: org.kde.Sdk
+command: littlenavmap
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --allow=per-app-dev-shm
+  - --filesystem=host
+  - --device=dri
+modules:
+  - name: double-conversion
+    buildsystem: cmake-ninja
+    config-opts:
+      - "-DBUILD_SHARED_LIBS=ON"
+      - "-DCMAKE_BUILD_TYPE=Release"
+    sources:
+      - type: archive
+        url: "https://github.com/google/double-conversion/archive/v3.1.5.tar.gz"
+        sha256: a63ecb93182134ba4293fd5f22d6e08ca417caafa244afaa751cbfddf6415b13
+        dest-filename: double-conversion-3.1.5.tar.gz
+  - name: littlenavmap
+    buildsystem: qmake
+    builddir: true
+    post-install:
+      - make copydata
+      - make deploy
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - install /run/build/littlenavmap/_flatpak_build/littlenavmap ${FLATPAK_DEST}/bin
+      - install -d ${FLATPAK_DEST}/share/applications/
+      - install -d ${FLATPAK_DEST}/share/metainfo/
+      - install -d ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - install -D -m644 /run/build/littlenavmap/resources/icons/littlenavmap.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/io.github.albar965.littlenavmap.svg
+      - install -D -m644 /run/build/littlenavmap/io.github.albar965.littlenavmap.desktop ${FLATPAK_DEST}/share/applications/
+      - install -D -m644 /run/build/littlenavmap/io.github.albar965.littlenavmap.metainfo.xml ${FLATPAK_DEST}/share/metainfo/
+    build-options:
+      env:
+        ATOOLS_INC_PATH: ${FLATPAK_DEST}/lib/atools/src
+        ATOOLS_LIB_PATH: ${FLATPAK_DEST}/lib/atools/build
+        MARBLE_INC_PATH: ${FLATPAK_DEST}/lib/marble/include
+        MARBLE_LIB_PATH: ${FLATPAK_DEST}/lib/marble/lib
+        XPSDK_BASE: /run/build/littlenavmap/xplane
+    config-opts:
+      - "-spec"
+      - "linux-g++"
+      - "CONFIG+=release"
+    sources:
+      - type: git
+        url: https://github.com/albar965/littlenavmap.git
+        tag: v2.8.11
+        commit: 29ae275cfa75353fdde286b677b1e88bbed40e12
+      - type: patch
+        path: littlenavmap-use-flatpak-paths.patch
+      - type: archive
+        url: https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK401.zip
+        sha256: c1104e83d9b54b03d0084c1db52ee6491e5290994503e8dd2d4a0af637e2bdd7
+        dest: xplane
+      - type: file
+        path: io.github.albar965.littlenavmap.desktop
+      - type: file
+        path: io.github.albar965.littlenavmap.metainfo.xml
+    modules:
+      - name: patchelf
+        sources:
+          - type: git
+            url: https://github.com/NixOS/patchelf.git
+            tag: 0.18.0
+            commit: 99c24238981b7b1084313aca8f5c493bb46f302c
+      - name: nlohmann-json
+        buildsystem: cmake-ninja
+        config-opts:
+          - -DCMAKE_BUILD_TYPE=Release
+          - -DJSON_BuildTests=OFF
+          - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+        sources:
+          - type: git
+            url: https://github.com/nlohmann/json.git
+            tag: v3.11.2
+            commit: bc889afb4c5bf1c0d8ee29ef35eaaf4c8bef8a5d
+      - name: atools
+        buildsystem: qmake
+        builddir: true
+        no-make-install: true
+        post-install:
+          - mkdir -p ${FLATPAK_DEST}/lib/atools
+          - cp -r /run/build/atools ${FLATPAK_DEST}/lib
+          - cp -r /run/build/atools/_flatpak_build ${FLATPAK_DEST}/lib/atools/build
+        config-opts:
+          - "-spec"
+          - "linux-g++"
+          - "CONFIG+=release"
+        sources:
+          - type: git
+            url: https://github.com/albar965/atools.git
+            tag: v3.8.17
+            commit: dbac942dac6bfbb4222722c0bf0433c04b60b5f0
+      - name: marble
+        buildsystem: cmake
+        config-opts:
+          - -DCMAKE_BUILD_TYPE=Release
+          - -DSTATIC_BUILD=TRUE
+          - -DQTONLY=TRUE
+          - -DBUILD_MARBLE_EXAMPLES=NO
+          - -DBUILD_INHIBIT_SCREENSAVER_PLUGIN=NO
+          - -DBUILD_MARBLE_APPS=NO
+          - -DBUILD_MARBLE_EXAMPLES=NO
+          - -DBUILD_MARBLE_TESTS=NO
+          - -DBUILD_MARBLE_TOOLS=NO
+          - -DBUILD_TESTING=NO
+          - -DBUILD_WITH_DBUS=NO
+          - -DMARBLE_EMPTY_MAPTHEME=YES
+          - -DMOBILE=NO
+          - -DWITH_DESIGNER_PLUGIN=NO
+          - -DWITH_Phonon=NO
+          - -DWITH_Qt5Location=NO
+          - -DWITH_Qt5Positioning=NO
+          - -DWITH_Qt5SerialPort=NO
+          - -DWITH_ZLIB=NO
+          - -DWITH_libgps=NO
+          - -DWITH_libshp=NO
+          - -DWITH_libwlocate=NO
+          - -DCMAKE_INSTALL_PREFIX=/app/lib/marble
+          - -DEXEC_INSTALL_PREFIX=/app/lib/marble
+        sources:
+          - type: git
+            url: https://github.com/albar965/marble.git
+            branch: lnm/1.1
+            commit: 564a141497046946b5b9903336e1ab12cdf9049f
+  - name: littlexpconnect
+    buildsystem: qmake
+    builddir: true
+    build-options:
+      env:
+        ATOOLS_INC_PATH: ${FLATPAK_DEST}/lib/atools-littlexpconnect/src
+        ATOOLS_LIB_PATH: ${FLATPAK_DEST}/lib/atools-littlexpconnect/build
+        XPSDK_BASE: /run/build/littlexpconnect/xplane
+    config-opts:
+      - "-spec"
+      - "linux-g++"
+      - "CONFIG+=release"
+    post-install:
+      - mkdir /app/littlexpconnect
+      - make deploy
+    sources:
+      - type: git
+        url: https://github.com/albar965/littlexpconnect.git
+        tag: v1.0.39
+        commit: 4aaa058dc4420e14ec3775e35c47518fb2eedc1e
+      - type: archive
+        url: https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK401.zip
+        sha256: c1104e83d9b54b03d0084c1db52ee6491e5290994503e8dd2d4a0af637e2bdd7
+        dest: xplane
+      - type: patch
+        path: littlexpconnect-correct-deploy-dir.patch
+    modules:
+      - name: atools-littlexpconnect
+        buildsystem: qmake
+        builddir: true
+        no-make-install: true
+        build-options:
+          env:
+            ATOOLS_NO_GRIB: "true"
+            ATOOLS_NO_FS: "true"
+        post-install:
+          - mkdir -p ${FLATPAK_DEST}/lib/atools
+          - cp -r /run/build/atools-littlexpconnect ${FLATPAK_DEST}/lib
+          - cp -r /run/build/atools-littlexpconnect/_flatpak_build ${FLATPAK_DEST}/lib/atools-littlexpconnect/build
+        config-opts:
+          - "-spec"
+          - "linux-g++"
+          - "CONFIG+=release"
+        sources:
+          - type: git
+            url: https://github.com/albar965/atools.git
+            tag: v3.8.17
+            commit: dbac942dac6bfbb4222722c0bf0433c04b60b5f0

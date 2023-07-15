@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2023 albar965 -->
+<component type="desktop-application">
+  <id>io.github.albar965.littlenavmap</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>Little Navmap</name>
+  <summary>Little Navmap is a free open source flight planner for simulators.</summary>
+
+  <description>
+    <p>
+      Little Navmap is a free open source flight planner, navigation tool, moving map, 
+      airport search and airport information system for Flight Simulator X, Prepar3D, Microsoft Flight Simulator 2020 and X-Plane.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">io.github.albar965.littlenavmap.desktop</launchable>
+  <url type="homepage">https://albar965.github.io/littlenavmap.html</url>
+
+  <provides>
+    <binary>littlenavmap</binary>
+  </provides>
+
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release date="2023-06-18" version="2.8.11"/>
+  </releases>
+</component>

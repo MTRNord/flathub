@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=littlenavmap
+# replace spaces with \s
+Path=/files/bin/
+Name=Little Navmap
+GenericName=Little Navmap
+# replace spaces with \s
+Icon=io.github.albar965.littlenavmap
+Terminal=false
+Categories=Qt;Utility;Geography;Maps;

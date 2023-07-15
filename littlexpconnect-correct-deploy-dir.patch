@@ -1,0 +1,13 @@
+diff --git a/littlexpconnect.pro b/littlexpconnect.pro
+index a9d4a2d..9c4e0e9 100644
+--- a/littlexpconnect.pro
++++ b/littlexpconnect.pro
+@@ -234,7 +234,7 @@ OTHER_FILES += \
+ 
+ # Linux specific deploy target
+ unix:!macx {
+-  DEPLOY_DIR=\"$$DEPLOY_BASE/$$TARGET_NAME\"
++  DEPLOY_DIR=\"/app/littlexpconnect\"
+ 
+   deploy.commands = rm -Rfv $${DEPLOY_DIR} &&
+   deploy.commands += mkdir -pv $${DEPLOY_DIR}/64 &&

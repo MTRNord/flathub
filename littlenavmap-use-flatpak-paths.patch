@@ -1,0 +1,49 @@
+diff --git a/littlenavmap.pro b/littlenavmap.pro
+index d68ec77..0523eb3 100644
+--- a/littlenavmap.pro
++++ b/littlenavmap.pro
+@@ -88,7 +88,7 @@ TEMPLATE = app
+ 
+ win32 { contains(QT_ARCH, i386) { WINARCH = win32 } else { WINARCH = win64 } }
+ 
+-TARGET_NAME=Little Navmap
++TARGET_NAME=app
+ 
+ # =======================================================================
+ # Copy environment variables into qmake variables
+@@ -764,10 +764,9 @@ macx {
+ 
+ # Linux specific deploy target
+ unix:!macx {
+-  DEPLOY_DIR=\"$$DEPLOY_BASE/$$TARGET_NAME\"
+-  DEPLOY_DIR_LIB=\"$$DEPLOY_BASE/$$TARGET_NAME/lib\"
++  DEPLOY_DIR=\"/app/bin\"
++  DEPLOY_DIR_LIB=\"/app/lib\"
+ 
+-  deploy.commands += rm -Rfv $$DEPLOY_DIR &&
+   deploy.commands += mkdir -pv $$DEPLOY_DIR_LIB &&
+   deploy.commands += mkdir -pv $$DEPLOY_DIR_LIB/iconengines &&
+   deploy.commands += mkdir -pv $$DEPLOY_DIR_LIB/imageformats &&
+@@ -792,13 +791,9 @@ unix:!macx {
+   deploy.commands += cp -vfa $$[QT_INSTALL_TRANSLATIONS]/qtbase*.qm  $$DEPLOY_DIR/translations &&
+   exists($$DATABASE_BASE) : deploy.commands += cp -Rvf $$DATABASE_BASE $$DEPLOY_DIR &&
+   exists($$HELP_BASE) : deploy.commands += cp -Rvf $$HELP_BASE/* $$DEPLOY_DIR/help &&
+-  deploy.commands += cp -vf $$PWD/desktop/\"Little Navmap Portable Linux.sh\" $$DEPLOY_DIR/\"Little Navmap Portable.sh\" &&
+-  deploy.commands += cp -vf $$PWD/desktop/qt.conf $$DEPLOY_DIR &&
++  deploy.commands += cp -vf $$PWD/desktop/qt.conf /app &&
+   deploy.commands += cp -vf $$PWD/CHANGELOG.txt $$DEPLOY_DIR &&
+-  deploy.commands += cp -vf $$PWD/README.txt $$DEPLOY_DIR &&
+   deploy.commands += cp -vf $$PWD/LICENSE.txt $$DEPLOY_DIR &&
+-  deploy.commands += cp -vf $$PWD/resources/icons/littlenavmap.svg $$DEPLOY_DIR &&
+-  deploy.commands += cp -vf \"$$PWD/desktop/Little Navmap.desktop\" $$DEPLOY_DIR &&
+   exists(/usr/lib/x86_64-linux-gnu/libssl.so.1.1) : deploy.commands += cp -vfaL /usr/lib/x86_64-linux-gnu/libssl.so.1.1 $$DEPLOY_DIR_LIB &&
+   exists(/usr/lib/x86_64-linux-gnu/libcrypto.so.1.1) : deploy.commands += cp -vfaL /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 $$DEPLOY_DIR_LIB &&
+   deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/iconengines/libqsvgicon.so*  $$DEPLOY_DIR_LIB/iconengines &&
+@@ -808,7 +803,6 @@ unix:!macx {
+   deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/imageformats/libqwbmp.so*  $$DEPLOY_DIR_LIB/imageformats &&
+   deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/imageformats/libqwebp.so*  $$DEPLOY_DIR_LIB/imageformats &&
+   deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/platforms/libqeglfs.so*  $$DEPLOY_DIR_LIB/platforms &&
+-  deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/platforms/libqlinuxfb.so*  $$DEPLOY_DIR_LIB/platforms &&
+   deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/platforms/libqminimal.so*  $$DEPLOY_DIR_LIB/platforms &&
+   deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/platforms/libqminimalegl.so*  $$DEPLOY_DIR_LIB/platforms &&
+   deploy.commands += cp -vfa $$[QT_INSTALL_PLUGINS]/platforms/libqoffscreen.so*  $$DEPLOY_DIR_LIB/platforms &&

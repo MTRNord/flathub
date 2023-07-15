@@ -54,7 +54,7 @@ modules:
         tag: v2.8.11
         commit: 29ae275cfa75353fdde286b677b1e88bbed40e12
       - type: patch
-        path: littlenavmap-use-flatpak-paths.patch
+        path: patch/littlenavmap-use-flatpak-paths.patch
       - type: archive
         url: https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK401.zip
         sha256: c1104e83d9b54b03d0084c1db52ee6491e5290994503e8dd2d4a0af637e2bdd7
@@ -155,26 +155,29 @@ modules:
         sha256: c1104e83d9b54b03d0084c1db52ee6491e5290994503e8dd2d4a0af637e2bdd7
         dest: xplane
       - type: patch
-        path: littlexpconnect-correct-deploy-dir.patch
+        path: patch/littlexpconnect-correct-deploy-dir.patch
     modules:
       - name: atools-littlexpconnect
         buildsystem: qmake
         builddir: true
         no-make-install: true
-        build-options:
-          env:
-            ATOOLS_NO_GRIB: "true"
-            ATOOLS_NO_FS: "true"
         post-install:
-          - mkdir -p ${FLATPAK_DEST}/lib/atools
+          - mkdir -p ${FLATPAK_DEST}/lib/atools-littlexpconnect
           - cp -r /run/build/atools-littlexpconnect ${FLATPAK_DEST}/lib
           - cp -r /run/build/atools-littlexpconnect/_flatpak_build ${FLATPAK_DEST}/lib/atools-littlexpconnect/build
         config-opts:
           - "-spec"
           - "linux-g++"
           - "CONFIG+=release"
+        build-options:
+          env:
+            ATOOLS_NO_GRIB: "true"
+            ATOOLS_NO_FS: "true"
         sources:
           - type: git
             url: https://github.com/albar965/atools.git
             tag: v3.8.17
             commit: dbac942dac6bfbb4222722c0bf0433c04b60b5f0
+        modules:
+          - ./helper-modules/qt5-static.json
+          - ./helper-modules/qt5-qtsvg.json

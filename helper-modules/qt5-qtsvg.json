@@ -1,0 +1,14 @@
+{
+    "name": "qt5-qtsvg",
+    "buildsystem": "qmake",
+    "cleanup-platform": [
+        "/bin"
+    ],
+    "sources": [
+        {
+            "type": "git",
+            "url": "https://invent.kde.org/qt/qt/qtsvg.git",
+            "commit": "37b2c764fb599c96fc415049208e871c729217c8"
+        }
+    ]
+}

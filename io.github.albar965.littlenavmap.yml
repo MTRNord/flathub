@@ -11,6 +11,7 @@ finish-args:
   - --allow=per-app-dev-shm
   - --filesystem=host
   - --device=dri
+  - --device=shm
 modules:
   - name: double-conversion
     buildsystem: cmake-ninja

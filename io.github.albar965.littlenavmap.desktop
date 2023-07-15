@@ -2,7 +2,6 @@
 Type=Application
 Exec=littlenavmap
 # replace spaces with \s
-Path=/files/bin/
 Name=Little Navmap
 GenericName=Little Navmap
 # replace spaces with \s

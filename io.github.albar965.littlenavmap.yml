@@ -8,10 +8,12 @@ finish-args:
   - --share=network
   - --socket=wayland
   - --socket=fallback-x11
-  - --allow=per-app-dev-shm
   - --filesystem=host
+  # Tmp is not exposed by specifying host. Host here is used for game files primarily
+  # There are 2 tmp files that are shared memory shared between the X-Plane game plugin and this app.
+  # Since we cannot expose just the 2 files we need to expose the entire /tmp folder to the host.
+  - --filesystem=/tmp
   - --device=dri
-  - --device=shm
 modules:
   - name: double-conversion
     buildsystem: cmake-ninja
@@ -190,6 +192,3 @@ modules:
             url: https://github.com/albar965/atools.git
             tag: v3.8.17
             commit: dbac942dac6bfbb4222722c0bf0433c04b60b5f0
-        modules:
-          - ./helper-modules/qt5-static.json
-          #- ./helper-modules/qt5-qtsvg.json

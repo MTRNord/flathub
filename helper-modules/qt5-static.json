@@ -1,86 +1,19 @@
 {
     "name": "qt5-qtbase",
+    "buildsystem": "simple",
     "cleanup-platform": [
         "/bin"
     ],
-    "build-options": {
-        "arch": {
-            "x86_64": {
-                "config-opts": [
-                    "-reduce-relocations",
-                    "-force-debug-info"
-                ]
-            },
-            "aarch64": {
-                "config-opts": [
-                    "-no-reduce-relocations",
-                    "-opengl es2"
-                ]
-            }
-        }
-    },
-    "config-opts": [
-        "-confirm-license",
-        "-opensource",
-        "-static",
-        "-platform",
-        "linux-g++",
-        "-optimized-qmake",
-        "-nomake",
-        "examples",
-        "-nomake",
-        "tests",
-        "-system-harfbuzz",
-        "-system-sqlite",
-        "-accessibility",
-        "-dbus-linked",
-        "-fontconfig",
-        "-glib",
-        "-icu",
-        "-openssl-linked",
-        "-no-pch",
-        "-no-rpath",
-        "-no-directfb",
-        "-no-linuxfb",
-        "-no-kms",
-        "-system-proxies",
-        "-gtk",
-        "-no-use-gold-linker",
-        "-archdatadir",
-        "/app/lib/qt-static"
+    "build-commands": [
+        "./configure -openssl-linked -static -prefix /app/static-qt -opensource -nomake examples -nomake tests -confirm-license -skip qtwayland -no-gui -no-widgets -no-dbus -qt-zlib -no-libpng -no-libjpeg -no-sqlite -no-freetype -no-harfbuzz -no-icu -no-iconv -nomake tools -no-evdev -no-accessibility -no-opengl -skip multimedia -no-qpa -skip tools -no-pch -no-kms -no-directfb -no-eglfs -no-xcb -no-cups -no-gif -no-tiff -no-ico -no-webp -skip declarative -skip location -skip serialbus",
+        "make -j4 module-qtbase",
+        "make install"
     ],
     "sources": [
         {
-            "type": "git",
-            "url": "https://invent.kde.org/qt/qt/qtbase.git",
-            "commit": "e8d9e68d25f4bf305f8b3ca5d678594ee4681baa"
-        },
-        {
-            "type": "patch",
-            "path": "patch/qtbase-avoid-hardcoding-kernel-version.patch"
-        },
-        {
-            "//TODO": "Temporary fix for https://github.com/flatpak/flatpak/issues/3397.",
-            "type": "patch",
-            "path": "patch/qtbase-revert-qstandardpaths-dont-change-permissions-on-xdg-runtime-dir.patch"
-        },
-        {
-            "type": "patch",
-            "path": "patch/qtbase-use-wayland-on-gnome.patch"
-        },
-        {
-            "type": "shell",
-            "commands": [
-                "mv configure configure.qt"
-            ]
-        },
-        {
-            "type": "script",
-            "commands": [
-                "processed=`sed -e 's/--/-/g ; s/=/ /g' <<< $@`",
-                "./configure.qt $processed"
-            ],
-            "dest-filename": "configure"
+            "type": "archive",
+            "url": "https://download.qt.io/archive/qt/5.15/5.15.10/single/qt-everywhere-opensource-src-5.15.10.tar.xz",
+            "md5": "fb41d86bea6bc4886030a5092c910b09"
         }
     ]
 }

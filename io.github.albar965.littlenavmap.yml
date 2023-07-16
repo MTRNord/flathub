@@ -130,6 +130,8 @@ modules:
             url: https://github.com/albar965/marble.git
             branch: lnm/1.1
             commit: 564a141497046946b5b9903336e1ab12cdf9049f
+  # https://github.com/albar965/littlexpconnect
+  # This is a companion plugin needed for the x-plane game for communication between little navmap and the game
   - name: littlexpconnect
     buildsystem: qmake
     builddir: true
@@ -173,6 +175,16 @@ modules:
           env:
             ATOOLS_NO_GRIB: "true"
             ATOOLS_NO_FS: "true"
+            ATOOLS_NO_FS: "true"
+            ATOOLS_NO_GRIB: "true"
+            ATOOLS_NO_GUI: "true"
+            ATOOLS_NO_ROUTING: "true"
+            ATOOLS_NO_SQL: "true"
+            ATOOLS_NO_TRACK: "true"
+            ATOOLS_NO_USERDATA: "true"
+            ATOOLS_NO_WEATHER: "true"
+            ATOOLS_NO_WEB: "true"
+            ATOOLS_NO_WMM: "true"
         sources:
           - type: git
             url: https://github.com/albar965/atools.git
@@ -180,4 +192,4 @@ modules:
             commit: dbac942dac6bfbb4222722c0bf0433c04b60b5f0
         modules:
           - ./helper-modules/qt5-static.json
-          - ./helper-modules/qt5-qtsvg.json
+          #- ./helper-modules/qt5-qtsvg.json
